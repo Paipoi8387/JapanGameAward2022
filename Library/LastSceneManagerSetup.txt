@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Kenjiro/SampleScene_Kenjiro.unity
+- path: Assets/Atsushi/SampleScene_Atsushi.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
