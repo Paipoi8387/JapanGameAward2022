@@ -1,5 +1,9 @@
 sceneSetups:
+<<<<<<< HEAD
 - path: Assets/Atsushi/Scene/Rism.unity
+=======
+- path: Assets/Kenjiro/SampleScene_Kenjiro.unity
+>>>>>>> 468bd61e72d9471e31ab969e1fb2db0702c282fe
   isLoaded: 1
   isActive: 1
   isSubScene: 0
