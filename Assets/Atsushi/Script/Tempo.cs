@@ -31,6 +31,7 @@ public class Tempo : MonoBehaviour
     [SerializeField] GameObject Obj_List;
     [SerializeField] GameObject HairPrefab1;
     [SerializeField] GameObject EnemyPrefab1;
+    [SerializeField] GameObject Player;
 
     // Start is called before the first frame update
     void Start()
@@ -66,11 +67,20 @@ public class Tempo : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D collision)
     {
-        if (Input.GetButton("Jump") && !is_touched)
+        if (Input.GetButton("Jump") && !is_touched && collision.tag == "Hair")
         {
             sound_source.PlayOneShot(beat_sound);
             is_touched = true;
             Judge.text = "OK";
+            collision.GetComponent<Animator>().SetBool("get_hair", true);
+            //大体正解パターンの時はtempoが23,24,0,1くらい
+            Debug.Log(tempo);
+        }else if (Input.GetButton("Jump") && !is_touched && collision.tag == "JumpZone")
+        {
+            sound_source.PlayOneShot(beat_sound);
+            is_touched = true;
+            Judge.text = "OK";
+            Player.GetComponent<Animator>().SetBool("player_jump", true);
             //大体正解パターンの時はtempoが23,24,0,1くらい
             Debug.Log(tempo);
         }
@@ -82,12 +92,7 @@ public class Tempo : MonoBehaviour
         Judge.text = "";
     }
 
-    public void Start_Button()
-    {
-        Notes_Make();
-    }
-
-    void Notes_Make()
+    public void Notes_Make()
     {
         csvFile = Resources.Load("TmpNotes") as TextAsset; // Resouces下のCSV読み込み
         StringReader reader = new StringReader(csvFile.text);
@@ -105,8 +110,12 @@ public class Tempo : MonoBehaviour
             switch (int.Parse(csvDatas[0][i]))
             {
                 case 1:
-                    Vector3 obj_trans = new Vector3((transform.localPosition.x + (float.Parse(csvDatas[1][i]) * move_distance * (window_height / 10) * tempo_max)) / (window_height / 10), -180 / (window_height / 10), 0.0f);
-                    GameObject obj = Instantiate(HairPrefab1, obj_trans, Quaternion.identity,Obj_List.transform);
+                    Vector3 obj_trans1 = new Vector3((transform.localPosition.x + ((float.Parse(csvDatas[1][i]) - 1) * move_distance * (window_height / 10) * tempo_max)) / (window_height / 10),0.0f, 0.0f);
+                    GameObject obj1 = Instantiate(HairPrefab1, obj_trans1, Quaternion.identity,Obj_List.transform);
+                    break;
+                case 2:
+                    Vector3 obj_trans2 = new Vector3((transform.localPosition.x + ((float.Parse(csvDatas[1][i]) - 1) * move_distance * (window_height / 10) * tempo_max)) / (window_height / 10), 0.0f, 0.0f);
+                    GameObject obj2 = Instantiate(EnemyPrefab1, obj_trans2, Quaternion.identity, Obj_List.transform);
                     break;
             }
         }
