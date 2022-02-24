@@ -14,8 +14,11 @@ public class Tempo : MonoBehaviour
     [SerializeField] Text Judge;
     int tempo = 0;
     int beat = 0;
-    bool is_start = false;
-    bool is_touched = false;
+    bool is_start = false; //ゲームをスタートしたか、していないか
+    bool is_maked = false; //ノーツを配置したか、していないか
+    bool is_touched = false; //ボタンを押したか、離したか
+    bool is_touching = false;
+    bool is_judged = false; //ノーツの判定をしたか、していないか
     //実際の1FixedUpdate当たりの移動距離はmove_distance*108
     //1小節あたりの距離はmove_distance*108 * 25　現在は675
     //半小節あたりの距離はmove_distance*108 * 25 / 2　現在は337.5
@@ -50,10 +53,24 @@ public class Tempo : MonoBehaviour
             {
                 tempo = 0;
                 beat++;
-                //sound_source.PlayOneShot(beat_sound);
             }
 
             this.transform.Translate(move_distance, 0, 0);
+
+            is_touching = false;
+            if(Input.GetButton("Jump"))
+            {
+                if (!is_touched)
+                {
+                    sound_source.PlayOneShot(beat_sound);
+                    is_touched = true;
+                    is_touching = true;
+                }
+            }
+            else
+            {
+                is_touched = false;
+            }           
         }
         else
         {
@@ -67,56 +84,67 @@ public class Tempo : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D collision)
     {
-        if (Input.GetButton("Jump") && !is_touched && collision.tag == "Hair")
+        if (collision.tag == "Boil")
         {
-            sound_source.PlayOneShot(beat_sound);
-            is_touched = true;
-            Judge.text = "OK";
-            collision.GetComponent<Animator>().SetBool("get_hair", true);
-            //大体正解パターンの時はtempoが23,24,0,1くらい
-            Debug.Log(tempo);
-        }else if (Input.GetButton("Jump") && !is_touched && collision.tag == "JumpZone")
+            //ダメージ判定
+        }
+        else
         {
-            sound_source.PlayOneShot(beat_sound);
-            is_touched = true;
-            Judge.text = "OK";
-            Player.GetComponent<Animator>().SetBool("player_jump", true);
-            //大体正解パターンの時はtempoが23,24,0,1くらい
-            Debug.Log(tempo);
+            if (is_touching && !is_judged)
+            {
+                is_judged = true;
+                Judge.text = "OK";
+                sound_source.PlayOneShot(correct_sound);
+                //大体正解パターンの時はtempoが23,24,0,1くらい
+                Debug.Log(tempo);
+
+                if (collision.tag == "Hair")
+                {
+                    collision.GetComponent<Animator>().SetBool("get_hair", true);
+                }
+                else if (collision.tag == "JumpZone")
+                {
+                    Player.GetComponent<Animator>().SetBool("player_jump", true);
+                }
+            }
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        is_touched = false;
         Judge.text = "";
+        is_judged = false;
     }
 
     public void Notes_Make()
     {
-        csvFile = Resources.Load("TmpNotes") as TextAsset; // Resouces下のCSV読み込み
-        StringReader reader = new StringReader(csvFile.text);
+        if (!is_maked)
+        {
+            is_maked = true;
+            csvFile = Resources.Load("TmpNotes") as TextAsset; // Resouces下のCSV読み込み
+            StringReader reader = new StringReader(csvFile.text);
 
-        // , で分割しつつ一行ずつ読み込み
-        // リストに追加していく
-        while (reader.Peek() != -1) // reader.Peaekが-1になるまで
-        {
-            string line = reader.ReadLine(); // 一行ずつ読み込み
-            csvDatas.Add(line.Split(',')); // , 区切りでリストに追加
-        }
-        //プレハブを配置
-        for (int i = 0; i < csvDatas[0].Length; i++)
-        {
-            switch (int.Parse(csvDatas[0][i]))
+            // , で分割しつつ一行ずつ読み込み
+            // リストに追加していく
+            while (reader.Peek() != -1) // reader.Peaekが-1になるまで
             {
-                case 1:
-                    Vector3 obj_trans1 = new Vector3((transform.localPosition.x + ((float.Parse(csvDatas[1][i]) - 1) * move_distance * (window_height / 10) * tempo_max)) / (window_height / 10),0.0f, 0.0f);
-                    GameObject obj1 = Instantiate(HairPrefab1, obj_trans1, Quaternion.identity,Obj_List.transform);
-                    break;
-                case 2:
-                    Vector3 obj_trans2 = new Vector3((transform.localPosition.x + ((float.Parse(csvDatas[1][i]) - 1) * move_distance * (window_height / 10) * tempo_max)) / (window_height / 10), 0.0f, 0.0f);
-                    GameObject obj2 = Instantiate(EnemyPrefab1, obj_trans2, Quaternion.identity, Obj_List.transform);
-                    break;
+                string line = reader.ReadLine(); // 一行ずつ読み込み
+                csvDatas.Add(line.Split(',')); // , 区切りでリストに追加
+            }
+            //プレハブを配置
+            for (int i = 0; i < csvDatas[0].Length; i++)
+            {
+                switch (int.Parse(csvDatas[0][i]))
+                {
+                    case 1:
+                        Vector3 obj_trans1 = new Vector3((transform.localPosition.x + ((float.Parse(csvDatas[1][i]) - 1) * move_distance * (window_height / 10) * tempo_max)) / (window_height / 10), 0.0f, 0.0f);
+                        GameObject obj1 = Instantiate(HairPrefab1, obj_trans1, Quaternion.identity, Obj_List.transform);
+                        break;
+                    case 2:
+                        Vector3 obj_trans2 = new Vector3((transform.localPosition.x + ((float.Parse(csvDatas[1][i]) - 1) * move_distance * (window_height / 10) * tempo_max)) / (window_height / 10), 0.0f, 0.0f);
+                        GameObject obj2 = Instantiate(EnemyPrefab1, obj_trans2, Quaternion.identity, Obj_List.transform);
+                        break;
+                }
             }
         }
     }
