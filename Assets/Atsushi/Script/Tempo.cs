@@ -36,11 +36,22 @@ public class Tempo : MonoBehaviour
     [SerializeField] GameObject EnemyPrefab1;
     [SerializeField] GameObject Player;
 
+    //UI関連
+    int hair_num = 0;
+    [SerializeField] Text Hair_Num;
+    int life_num = 3;
+    [SerializeField] GameObject Life1;
+    [SerializeField] GameObject Life2;
+    [SerializeField] GameObject Life3;
+    GameObject[] Lifes;
+
     // Start is called before the first frame update
     void Start()
     {
         //1小節当たりのFixedUpdateの呼び出し回数
         tempo_max = 60 / (0.02f * bps);
+        Notes_Make();
+        Lifes = new GameObject[] { Life1, Life2, Life3 };
     }
 
     // Update is called once per frame
@@ -58,7 +69,7 @@ public class Tempo : MonoBehaviour
             this.transform.Translate(move_distance, 0, 0);
 
             is_touching = false;
-            if(Input.GetButton("Jump"))
+            if (Input.GetButton("Jump"))
             {
                 if (!is_touched)
                 {
@@ -70,7 +81,7 @@ public class Tempo : MonoBehaviour
             else
             {
                 is_touched = false;
-            }           
+            }
         }
         else
         {
@@ -84,11 +95,7 @@ public class Tempo : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.tag == "Boil")
-        {
-            //ダメージ判定
-        }
-        else
+        if (collision.tag != "Boil")       
         {
             if (is_touching && !is_judged)
             {
@@ -101,12 +108,24 @@ public class Tempo : MonoBehaviour
                 if (collision.tag == "Hair")
                 {
                     collision.GetComponent<Animator>().SetBool("get_hair", true);
+                    hair_num++;
+                    Hair_Num.text = "本数：" + hair_num + "本";
                 }
                 else if (collision.tag == "JumpZone")
                 {
                     Player.GetComponent<Animator>().SetBool("player_jump", true);
                 }
             }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Boil")
+        {
+            //ダメージ判定
+            life_num--;
+            Lifes[life_num].GetComponent<Animator>().SetBool("lost_life", true);
         }
     }
 
@@ -124,8 +143,7 @@ public class Tempo : MonoBehaviour
             csvFile = Resources.Load("TmpNotes") as TextAsset; // Resouces下のCSV読み込み
             StringReader reader = new StringReader(csvFile.text);
 
-            // , で分割しつつ一行ずつ読み込み
-            // リストに追加していく
+            // , で分割しつつ一行ずつ読み込み、リストに追加していく
             while (reader.Peek() != -1) // reader.Peaekが-1になるまで
             {
                 string line = reader.ReadLine(); // 一行ずつ読み込み
