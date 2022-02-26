@@ -10,22 +10,21 @@ public class Tempo : MonoBehaviour
     [SerializeField] AudioSource sound_source;
     [SerializeField] AudioSource bgm_source;
     [SerializeField] AudioClip beat_sound;
-    [SerializeField] AudioClip correct_sound;
-    [SerializeField] Text Judge;
-    int tempo = 0;
+    public int tempo = 0;
     int beat = 0;
     bool is_start = false; //ゲームをスタートしたか、していないか
     bool is_maked = false; //ノーツを配置したか、していないか
     bool is_touched = false; //ボタンを押したか、離したか
-    bool is_touching = false;
-    bool is_judged = false; //ノーツの判定をしたか、していないか
+    public enum Touching_Key {Null,Space,Enter};
+    public Touching_Key touching_key = Touching_Key.Null;
+
     //実際の1FixedUpdate当たりの移動距離はmove_distance*108
     //1小節あたりの距離はmove_distance*108 * 25　現在は675
     //半小節あたりの距離はmove_distance*108 * 25 / 2　現在は337.5
     //オブジェクト同士の距離は最短で半小節あたりの距離にする予定
     float window_height = 1080;
     float tempo_max;
-    [SerializeField] int bps = 120;
+    [SerializeField] int bpm = 120;
     [SerializeField] float move_distance = 1f;
 
     TextAsset csvFile;
@@ -49,7 +48,7 @@ public class Tempo : MonoBehaviour
     void Start()
     {
         //1小節当たりのFixedUpdateの呼び出し回数
-        tempo_max = 60 / (0.02f * bps);
+        tempo_max = 60 / (0.02f * bpm);
         Notes_Make();
         Lifes = new GameObject[] { Life1, Life2, Life3 };
     }
@@ -68,14 +67,25 @@ public class Tempo : MonoBehaviour
 
             this.transform.Translate(move_distance, 0, 0);
 
-            is_touching = false;
-            if (Input.GetButton("Jump"))
+            //is_touching = false;
+            touching_key = Touching_Key.Null;
+            if (Input.GetButton("Jump") || Input.GetButton("Submit"))
             {
                 if (!is_touched)
-                {
+                {                    
                     sound_source.PlayOneShot(beat_sound);
                     is_touched = true;
-                    is_touching = true;
+                    if (Input.GetButton("Jump"))
+                    {
+                        touching_key = Touching_Key.Space;
+                        Player.GetComponent<Animator>().SetBool("player_jump", true);
+                    }
+                    else if (Input.GetButton("Submit"))
+                    {
+                        touching_key = Touching_Key.Enter;
+                    }
+                    //is_touching = true;
+                    Debug.Log(touching_key);
                 }
             }
             else
@@ -91,48 +101,6 @@ public class Tempo : MonoBehaviour
                 bgm_source.Play();
             }
         }
-    }
-
-    void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.tag != "Boil")       
-        {
-            if (is_touching && !is_judged)
-            {
-                is_judged = true;
-                Judge.text = "OK";
-                sound_source.PlayOneShot(correct_sound);
-                //大体正解パターンの時はtempoが23,24,0,1くらい
-                Debug.Log(tempo);
-
-                if (collision.tag == "Hair")
-                {
-                    collision.GetComponent<Animator>().SetBool("get_hair", true);
-                    hair_num++;
-                    Hair_Num.text = "本数：" + hair_num + "本";
-                }
-                else if (collision.tag == "JumpZone")
-                {
-                    Player.GetComponent<Animator>().SetBool("player_jump", true);
-                }
-            }
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.tag == "Boil")
-        {
-            //ダメージ判定
-            life_num--;
-            Lifes[life_num].GetComponent<Animator>().SetBool("lost_life", true);
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        Judge.text = "";
-        is_judged = false;
     }
 
     public void Notes_Make()
@@ -155,15 +123,27 @@ public class Tempo : MonoBehaviour
                 switch (int.Parse(csvDatas[0][i]))
                 {
                     case 1:
-                        Vector3 obj_trans1 = new Vector3((transform.localPosition.x + ((float.Parse(csvDatas[1][i]) - 1) * move_distance * (window_height / 10) * tempo_max)) / (window_height / 10), 0.0f, 0.0f);
+                        Vector3 obj_trans1 = new Vector3((Player.transform.localPosition.x + ((float.Parse(csvDatas[1][i]) - 1) * move_distance * (window_height / 10) * tempo_max)) / (window_height / 10), 0.0f, 0.0f);
                         GameObject obj1 = Instantiate(HairPrefab1, obj_trans1, Quaternion.identity, Obj_List.transform);
                         break;
                     case 2:
-                        Vector3 obj_trans2 = new Vector3((transform.localPosition.x + ((float.Parse(csvDatas[1][i]) - 1) * move_distance * (window_height / 10) * tempo_max)) / (window_height / 10), 0.0f, 0.0f);
+                        Vector3 obj_trans2 = new Vector3((Player.transform.localPosition.x + ((float.Parse(csvDatas[1][i]) - 1) * move_distance * (window_height / 10) * tempo_max)) / (window_height / 10), 0.0f, 0.0f);
                         GameObject obj2 = Instantiate(EnemyPrefab1, obj_trans2, Quaternion.identity, Obj_List.transform);
                         break;
                 }
             }
         }
+    }
+
+    public void Change_Hair_Num()
+    {
+        hair_num++;
+        Hair_Num.text = "本数：" + hair_num + "本";
+    }
+
+    public void Lost_Life()
+    {
+        life_num--;
+        Lifes[life_num].GetComponent<Animator>().SetBool("lost_life", true);
     }
 }
