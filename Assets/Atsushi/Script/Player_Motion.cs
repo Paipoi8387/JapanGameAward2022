@@ -22,9 +22,9 @@ public class Player_Motion : MonoBehaviour
         GetComponent<Animator>().SetBool("player_jump", false);
     }
 
-    void Player_Get_Hair()
+    void Player_Finish_Eat()
     {
-        //GetComponent<Animator>().SetBool("player_jump", true);
+        GetComponent<Animator>().SetBool("player_eat", false);
     }
 
     void OnTriggerStay2D(Collider2D collision)

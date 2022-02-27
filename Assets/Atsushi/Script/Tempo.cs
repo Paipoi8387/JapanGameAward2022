@@ -61,6 +61,7 @@ public class Tempo : MonoBehaviour
             tempo++;
             if (tempo == tempo_max)
             {
+                sound_source.PlayOneShot(beat_sound);
                 tempo = 0;
                 beat++;
             }
@@ -73,7 +74,7 @@ public class Tempo : MonoBehaviour
             {
                 if (!is_touched)
                 {                    
-                    sound_source.PlayOneShot(beat_sound);
+                    //sound_source.PlayOneShot(beat_sound);
                     is_touched = true;
                     if (Input.GetButton("Jump"))
                     {
@@ -83,9 +84,10 @@ public class Tempo : MonoBehaviour
                     else if (Input.GetButton("Submit"))
                     {
                         touching_key = Touching_Key.Enter;
+                        Player.GetComponent<Animator>().SetBool("player_eat", true);
                     }
                     //is_touching = true;
-                    Debug.Log(touching_key);
+                    //Debug.Log(touching_key);
                 }
             }
             else
