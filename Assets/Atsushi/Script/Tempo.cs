@@ -79,12 +79,12 @@ public class Tempo : MonoBehaviour
                     if (Input.GetButton("Jump"))
                     {
                         touching_key = Touching_Key.Space;
-                        Player.GetComponent<Animator>().SetBool("player_jump", true);
+                        Player.GetComponent<Animator>().SetBool("player_jump_early", true);
                     }
                     else if (Input.GetButton("Submit"))
                     {
                         touching_key = Touching_Key.Enter;
-                        Player.GetComponent<Animator>().SetBool("player_eat", true);
+                        Player.GetComponent<Animator>().SetBool("player_eat_early", true);
                     }
                     //is_touching = true;
                     //Debug.Log(touching_key);
@@ -110,7 +110,7 @@ public class Tempo : MonoBehaviour
         if (!is_maked)
         {
             is_maked = true;
-            csvFile = Resources.Load("TmpNotes") as TextAsset; // Resouces下のCSV読み込み
+            csvFile = Resources.Load("TmpNotes2") as TextAsset; // Resouces下のCSV読み込み
             StringReader reader = new StringReader(csvFile.text);
 
             // , で分割しつつ一行ずつ読み込み、リストに追加していく

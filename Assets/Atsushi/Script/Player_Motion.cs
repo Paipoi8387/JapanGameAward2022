@@ -22,9 +22,19 @@ public class Player_Motion : MonoBehaviour
         GetComponent<Animator>().SetBool("player_jump", false);
     }
 
+    void Player_Landing_Early()
+    {
+        GetComponent<Animator>().SetBool("player_jump_early", false);
+    }
+
     void Player_Finish_Eat()
     {
         GetComponent<Animator>().SetBool("player_eat", false);
+    }
+
+    void Player_Finish_Eat_Early()
+    {
+        GetComponent<Animator>().SetBool("player_eat_early", false);
     }
 
     void OnTriggerStay2D(Collider2D collision)
