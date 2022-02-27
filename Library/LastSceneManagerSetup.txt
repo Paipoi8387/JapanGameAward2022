@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Atsushi/Scene/Rism.unity
+- path: Assets/Kenjiro/Rism_test.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
