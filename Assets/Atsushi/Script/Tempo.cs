@@ -44,6 +44,8 @@ public class Tempo : MonoBehaviour
     [SerializeField] GameObject Life3;
     GameObject[] Lifes;
 
+    [SerializeField] GameObject BackGround;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -68,7 +70,6 @@ public class Tempo : MonoBehaviour
 
             this.transform.Translate(move_distance, 0, 0);
 
-            //is_touching = false;
             touching_key = Touching_Key.Null;
             if (Input.GetButton("Jump") || Input.GetButton("Submit"))
             {
@@ -79,15 +80,13 @@ public class Tempo : MonoBehaviour
                     if (Input.GetButton("Jump"))
                     {
                         touching_key = Touching_Key.Space;
-                        Player.GetComponent<Animator>().SetBool("player_jump_early", true);
+                        Player.GetComponent<Animator>().SetBool("player_jump", true);
                     }
                     else if (Input.GetButton("Submit"))
                     {
                         touching_key = Touching_Key.Enter;
                         Player.GetComponent<Animator>().SetBool("player_eat_early", true);
                     }
-                    //is_touching = true;
-                    //Debug.Log(touching_key);
                 }
             }
             else
@@ -101,6 +100,7 @@ public class Tempo : MonoBehaviour
             {
                 is_start = true;
                 bgm_source.Play();
+                BackGround.GetComponent<Animator>().SetBool("background_start", true);
             }
         }
     }
@@ -110,7 +110,7 @@ public class Tempo : MonoBehaviour
         if (!is_maked)
         {
             is_maked = true;
-            csvFile = Resources.Load("TmpNotes2") as TextAsset; // Resouces下のCSV読み込み
+            csvFile = Resources.Load("TmpNotes") as TextAsset; // Resouces下のCSV読み込み
             StringReader reader = new StringReader(csvFile.text);
 
             // , で分割しつつ一行ずつ読み込み、リストに追加していく

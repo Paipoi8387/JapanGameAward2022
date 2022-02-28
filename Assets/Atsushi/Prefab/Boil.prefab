@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 474130137458881314}
   - component: {fileID: 3942694688019224540}
   - component: {fileID: 4970695778094749520}
-  - component: {fileID: 738615282125797129}
+  - component: {fileID: 4456983964745558176}
   m_Layer: 5
   m_Name: Boil
   m_TagString: Boil
@@ -72,7 +72,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 220, y: -355}
+  m_AnchoredPosition: {x: 350, y: -355}
   m_SizeDelta: {x: 124, y: 96}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3942694688019224540
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8196079, g: 0.6784314, b: 0.5294118, a: 1}
+  m_Color: {r: 0.81960785, g: 0.6665952, b: 0.5294118, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -113,7 +113,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!70 &738615282125797129
+--- !u!70 &4456983964745558176
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,8 +126,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 96, y: 1}
+  m_Offset: {x: 10, y: -5}
+  m_Size: {x: 124, y: 1}
   m_Direction: 0
 --- !u!1 &5585829488746261206
 GameObject:
