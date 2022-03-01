@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637813956713254113
-    m_Hash: 843144830
+      ticks: 637816366695063970
+    m_Hash: 801773296
   m_LockFileStatus:
     m_FilePath: "C:/Users/ats07/OneDrive/\u30C9\u30AD\u30E5\u30E1\u30F3\u30C8/JapanGameAward2022/Packages/packages-lock.json"
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637813956713704351
-    m_Hash: 3557616482
+      ticks: 637816366695467766
+    m_Hash: 130233077
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_PackageAssets:
@@ -179,112 +179,6 @@ m_PackageAssets:
         type: git
         url: https://github.cds.internal.unity3d.com/unity/2d.git
         revision: 6d621046a6155c48d71d5749b56c8bb9beaa02db
-        path: 
-    - packageId: com.unity.2d.ik@3.0.2-preview.3
-      testable: 0
-      isDirectDependency: 1
-      version: 3.0.2-preview.3
-      source: 1
-      resolvedPath: "C:\\Users\\ats07\\OneDrive\\\u30C9\u30AD\u30E5\u30E1\u30F3\u30C8\\JapanGameAward2022\\Library\\PackageCache\\com.unity.2d.ik@3.0.2-preview.3"
-      assetPath: Packages/com.unity.2d.ik
-      name: com.unity.2d.ik
-      displayName: 2D IK
-      author:
-        name: 
-        email: 
-        url: 
-      category: 2D
-      type: 
-      description: 2D IK package provides the necessary editor tooling to setup inverse
-        kinematics for 2D characters and a runtime component to execute it.
-      status: 4
-      errors: []
-      versions:
-        all:
-        - 1.0.5-preview.1
-        - 1.0.5-preview.2
-        - 1.0.5-preview.3
-        - 1.0.6-preview
-        - 1.0.6-preview.1
-        - 1.0.7-preview.1
-        - 1.0.8-preview.1
-        - 1.1.0-preview.1
-        - 1.2.0-preview.2
-        - 1.3.0-preview.1
-        - 2.0.0-preview.1
-        - 2.0.0-preview.2
-        - 2.0.1-preview.2
-        - 2.0.2-preview.1
-        - 2.1.0-preview.1
-        - 2.2.0-preview.1
-        - 3.0.0-preview.1
-        - 3.0.0-preview.2
-        - 3.0.1-preview.2
-        - 3.0.2-preview.1
-        - 3.0.2-preview.3
-        compatible:
-        - 1.0.5-preview.1
-        - 1.0.5-preview.2
-        - 1.0.5-preview.3
-        - 1.0.6-preview
-        - 1.0.6-preview.1
-        - 1.0.7-preview.1
-        - 1.0.8-preview.1
-        - 1.1.0-preview.1
-        - 1.2.0-preview.2
-        - 1.3.0-preview.1
-        - 2.0.0-preview.1
-        - 2.0.0-preview.2
-        - 2.0.1-preview.2
-        - 2.0.2-preview.1
-        - 2.1.0-preview.1
-        - 2.2.0-preview.1
-        - 3.0.0-preview.1
-        - 3.0.0-preview.2
-        - 3.0.1-preview.2
-        - 3.0.2-preview.1
-        - 3.0.2-preview.3
-        verified: 
-      dependencies:
-      - name: com.unity.2d.common
-        version: 3.0.1
-      resolvedDependencies:
-      - name: com.unity.2d.common
-        version: 4.1.0
-      - name: com.unity.2d.sprite
-        version: 1.0.0
-      - name: com.unity.modules.uielements
-        version: 1.0.0
-      - name: com.unity.modules.ui
-        version: 1.0.0
-      - name: com.unity.modules.imgui
-        version: 1.0.0
-      - name: com.unity.modules.jsonserialize
-        version: 1.0.0
-      - name: com.unity.modules.uielementsnative
-        version: 1.0.0
-      keywords:
-      - 2d
-      - ik
-      registry:
-        id: main
-        name: 
-        url: https://packages.unity.com
-        scopes: []
-        isDefault: 1
-        capabilities: 7
-      hasRegistry: 1
-      hideInEditor: 1
-      entitlements:
-        isAllowed: 1
-      isAssetStorePackage: 0
-      datePublishedTicks: 637436853810000000
-      documentationUrl: 
-      hasRepository: 1
-      repository:
-        type: git
-        url: https://github.cds.internal.unity3d.com/unity/2d.git
-        revision: dd8b11f003d767d40cea1bf8767e294c05869f4e
         path: 
     - packageId: com.unity.2d.psdimporter@4.2.0
       testable: 0
