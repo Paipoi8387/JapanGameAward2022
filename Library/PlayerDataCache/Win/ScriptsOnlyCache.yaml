@@ -1,6 +1,7 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - Effect_Motion
     - Player_Motion
     - Tempo
     Unity.2D.Animation.Editor.dll:
@@ -37,6 +38,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
+    - UnityEngine.UI.Outline
     - UnityEngine.UI.Text
   sceneClasses:
     Assets/Atsushi/Scene/Rism.unity:
@@ -79,6 +81,8 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1596}
     - Class: 114
+      Script: {instanceID: 1706}
+    - Class: 114
       Script: {instanceID: 2224}
     - Class: 114
       Script: {instanceID: 2422}
@@ -90,6 +94,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 3026}
     - Class: 114
       Script: {instanceID: 3260}
+    - Class: 114
+      Script: {instanceID: 3672}
     - Class: 114
       Script: {instanceID: 4078}
     - Class: 115
@@ -169,6 +175,12 @@ ScriptsOnlyBuild:
     className: Selectable
   - hash:
       serializedVersion: 2
+      Hash: b4e6bfb755419ec33ef8b731e04de2c8
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Effect_Motion
+  - hash:
+      serializedVersion: 2
       Hash: 21a9c6dbf300fc1f6dc15ca7e2c39a37
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
@@ -223,7 +235,7 @@ ScriptsOnlyBuild:
     className: RawImage
   - hash:
       serializedVersion: 2
-      Hash: fd7bfd246ad1f8710ff6694ae67bfa16
+      Hash: eae6e2d0f18e924ce11502aa716c3952
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Tempo
@@ -445,7 +457,7 @@ ScriptsOnlyBuild:
     className: AudioPlayableAsset
   - hash:
       serializedVersion: 2
-      Hash: 3efe6bc543bca90c0d4241e64efc9a48
+      Hash: 2313b7bbfa2b5abffea22300c2d1c6e3
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Player_Motion
@@ -620,4 +632,4 @@ ScriptsOnlyBuild:
   platform: 5
   scenePathNames:
   - Assets/Atsushi/Scene/Rism.unity
-  playerPath: "C:/Users/ats07/OneDrive/\u30C9\u30AD\u30E5\u30E1\u30F3\u30C8/JapanGameAward2022/Windows\u7528/JapanGameAward2022.exe"
+  playerPath: "C:/Users/ats07/OneDrive/\u30C9\u30AD\u30E5\u30E1\u30F3\u30C8/Windows\u7528/JapanGameAward2022.exe"

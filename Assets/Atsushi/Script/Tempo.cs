@@ -10,8 +10,8 @@ public class Tempo : MonoBehaviour
     [SerializeField] AudioSource sound_source;
     [SerializeField] AudioSource bgm_source;
     [SerializeField] AudioClip beat_sound;
-    public int tempo = 0;
-    int beat = 0;
+    //public int tempo = 0;
+    //int beat = 0;
     bool is_start = false; //ゲームをスタートしたか、していないか
     bool is_maked = false; //ノーツを配置したか、していないか
     bool is_touched = false; //ボタンを押したか、離したか
@@ -25,6 +25,9 @@ public class Tempo : MonoBehaviour
     float window_height = 1080;
     float tempo_max;
     [SerializeField] int bpm = 120;
+    double beat_num = 1;
+    double frediv;
+    double diff;
     [SerializeField] float move_distance = 1f;
 
     TextAsset csvFile;
@@ -46,11 +49,19 @@ public class Tempo : MonoBehaviour
 
     [SerializeField] GameObject BackGround;
 
+    [SerializeField] Text Judge;
+
     // Start is called before the first frame update
     void Start()
     {
+        //ここでwindowサイズを調整するのでタイトルsceneをつくったら書くようにする
+        Screen.SetResolution(1920, 1080, false);
+
+
+
         //1小節当たりのFixedUpdateの呼び出し回数
         tempo_max = 60 / (0.02f * bpm);
+        frediv = 44100 / (bpm / 60);
         Notes_Make();
         Lifes = new GameObject[] { Life1, Life2, Life3 };
     }
@@ -60,12 +71,18 @@ public class Tempo : MonoBehaviour
     {
         if (is_start)
         {
-            tempo++;
+            /*tempo++;
             if (tempo == tempo_max)
             {
                 sound_source.PlayOneShot(beat_sound);
                 tempo = 0;
                 beat++;
+            }*/
+            diff = beat_num - bgm_source.timeSamples / frediv;
+            if (diff < 0)
+            {
+                beat_num++;
+                sound_source.PlayOneShot(beat_sound);
             }
 
             this.transform.Translate(move_distance, 0, 0);
@@ -80,12 +97,12 @@ public class Tempo : MonoBehaviour
                     if (Input.GetButton("Jump"))
                     {
                         touching_key = Touching_Key.Space;
-                        Player.GetComponent<Animator>().SetBool("player_jump", true);
+                        Player.GetComponent<Player_Motion>().Player_Jump();
                     }
                     else if (Input.GetButton("Submit"))
                     {
                         touching_key = Touching_Key.Enter;
-                        Player.GetComponent<Animator>().SetBool("player_eat_early", true);
+                        Player.GetComponent<Player_Motion>().Player_Eat_Early();
                     }
                 }
             }
