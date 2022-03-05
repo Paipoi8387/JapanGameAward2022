@@ -1,15 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Stage_Manager : MonoBehaviour
 {
+    enum Select_Stage { Map, Check, Loading };
+    enum Check_Button { Null, Start, Back };
+    Check_Button check_button = Check_Button.Null;
+    Select_Stage select_stage = Select_Stage.Map;
+
     [SerializeField] GameObject PlayerCharacter;
     [SerializeField] GameObject Stage1;
     [SerializeField] GameObject Stage2;
     [SerializeField] GameObject Stage3;
     [SerializeField] GameObject Stage4;
     [SerializeField] GameObject Stage5;
+
+    [SerializeField] GameObject Check_Window;
+    [SerializeField] GameObject Start_Button;
+    [SerializeField] GameObject Back_Button;
+
+    [SerializeField] GameObject FadeIn;
 
     [SerializeField] int release_stage_num = 3;
     int select_stage_num = 1;
@@ -18,6 +31,8 @@ public class Stage_Manager : MonoBehaviour
     [SerializeField] float arrived_distance = 0.1f;
 
     GameObject[] All_Stage;
+
+    [SerializeField] Text Best_Score;
 
 
     // Start is called before the first frame update
@@ -38,26 +53,73 @@ public class Stage_Manager : MonoBehaviour
         }
 
         PlayerCharacter.transform.localPosition = All_Stage[select_stage_num - 1].transform.localPosition;
+        select_stage = Select_Stage.Map;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!is_moving)
+        if (select_stage == Select_Stage.Map)
         {
-            Stage_Select();
-        }
-        else
-        {
-            arrived_rate += 0.001f;
-            PlayerCharacter.transform.localPosition = Vector3.Lerp(PlayerCharacter.transform.localPosition, All_Stage[select_stage_num - 1].transform.localPosition, arrived_rate);
-        }
+            if (!is_moving)
+            {
+                Stage_Select();
+            }
+            else
+            {
+                arrived_rate += 0.001f;
+                PlayerCharacter.transform.localPosition = Vector3.Lerp(PlayerCharacter.transform.localPosition, All_Stage[select_stage_num - 1].transform.localPosition, arrived_rate);
+            }
 
-        if (Vector3.Distance(PlayerCharacter.transform.localPosition, All_Stage[select_stage_num-1].transform.localPosition) < arrived_distance)
-        {
-            is_moving = false;
-            arrived_rate = 0;
+            if (Vector3.Distance(PlayerCharacter.transform.localPosition, All_Stage[select_stage_num - 1].transform.localPosition) < arrived_distance)
+            {
+                is_moving = false;
+                arrived_rate = 0;
+            }
         }
+        else if (select_stage == Select_Stage.Check)
+        {
+            Stage_Check();
+        }
+    }
+
+    void Stage_Check()
+    {
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            check_button = Check_Button.Back;
+            Back_Button.GetComponent<Animator>().SetBool("button_select", true);
+            Start_Button.GetComponent<Animator>().SetBool("button_select", false);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            check_button = Check_Button.Start;
+            Back_Button.GetComponent<Animator>().SetBool("button_select", false);
+            Start_Button.GetComponent<Animator>().SetBool("button_select", true);
+        }
+        else if (Input.GetKeyDown(KeyCode.Return))
+        {
+            if (check_button == Check_Button.Back)
+            {
+                select_stage = Select_Stage.Map;
+                check_button = Check_Button.Null;
+            }
+            else if (check_button == Check_Button.Start)
+            {
+                FadeIn.GetComponent<Animator>().SetBool("fadein", true);
+                select_stage = Select_Stage.Loading;
+                Invoke("Change_Scene", 2f);
+            }
+            Check_Window.SetActive(false);
+            Back_Button.GetComponent<Animator>().SetBool("button_select", false);
+            Start_Button.GetComponent<Animator>().SetBool("button_select", false);
+        }
+    }
+
+    void Change_Scene()
+    {
+        //SceneManager.LoadScene("Rism" + select_stage);
+        SceneManager.LoadScene("Rism");
     }
 
     void Stage_Select()
@@ -75,7 +137,7 @@ public class Stage_Manager : MonoBehaviour
                 break;
             case 3:
                 if (release_stage_num >= 3 && Input.GetKeyDown(KeyCode.DownArrow)) { select_stage_num = 2; }
-                else if (release_stage_num >= 4 && Input.GetKeyDown(KeyCode.RightArrow)) { select_stage_num = 4; }
+                else if (release_stage_num >= 4 && Input.GetKeyDown(KeyCode.LeftArrow)) { select_stage_num = 4; }
                 break;
             case 4:
                 if (release_stage_num >= 4 && Input.GetKeyDown(KeyCode.RightArrow)) { select_stage_num = 3; }
@@ -86,6 +148,12 @@ public class Stage_Manager : MonoBehaviour
                 else if (release_stage_num >= 1 && Input.GetKeyDown(KeyCode.DownArrow)) { select_stage_num = 1; }
                 break;
         }
-        if(before_stage_num != select_stage_num) { is_moving = true; }
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Check_Window.SetActive(true);
+            select_stage = Select_Stage.Check;
+            Best_Score.text = PlayerPrefs.GetInt("Best_Score"+select_stage,0) + "Б@ВƒВс";
+        }
+        else if (before_stage_num != select_stage_num) { is_moving = true; }
     }
 }

@@ -93,6 +93,7 @@ public class Player_Motion : MonoBehaviour
             {
                 collision.GetComponent<Animator>().SetBool("get_hair", true);
                 tempoCS.Change_Hair_Num();
+                sound_source.PlayOneShot(correct_sound);
             }
             /*else if (tempoCS.touching_key == Tempo.Touching_Key.Space && collision.tag == "JumpZone")
             {

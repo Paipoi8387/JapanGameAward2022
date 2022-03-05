@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using System.Windows.Forms;
 
 
 public class Tempo : MonoBehaviour
@@ -30,6 +31,8 @@ public class Tempo : MonoBehaviour
     double diff;
     [SerializeField] float move_distance = 1f;
 
+    OpenFileDialog ofd;
+    string file_name;
     TextAsset csvFile;
     List<string[]> csvDatas = new List<string[]>(); // CSVの中身を入れるリスト;
 
@@ -55,14 +58,22 @@ public class Tempo : MonoBehaviour
     void Start()
     {
         //ここでwindowサイズを調整するのでタイトルsceneをつくったら書くようにする
-        Screen.SetResolution(1920, 1080, false);
+        UnityEngine.Screen.SetResolution(1920, 1080, false);
 
+        //フォルダ参照用処理
+        ofd = new OpenFileDialog();
+        ofd.ShowDialog();
+        file_name = ofd.FileName;
+        WWW www = new WWW("file://" + file_name);
+        bgm_source.clip = www.GetAudioClip(false, true);
 
+        ofd = new OpenFileDialog();
+        ofd.ShowDialog();
+        file_name = ofd.FileName;
+        //Debug.Log(file_name);
 
-        //1小節当たりのFixedUpdateの呼び出し回数
-        tempo_max = 60 / (0.02f * bpm);
-        frediv = 44100 / (bpm / 60);
         Notes_Make();
+        
         Lifes = new GameObject[] { Life1, Life2, Life3 };
     }
 
@@ -127,8 +138,13 @@ public class Tempo : MonoBehaviour
         if (!is_maked)
         {
             is_maked = true;
-            csvFile = Resources.Load("TmpNotes") as TextAsset; // Resouces下のCSV読み込み
-            StringReader reader = new StringReader(csvFile.text);
+
+            //従来方式でcsv読み取り
+            //csvFile = Resources.Load("TmpNotes") as TextAsset; // Resouces下のCSV読み込み
+            //StringReader reader = new StringReader(csvFile.text);
+
+            //フォルダから選択したファイルを読み取る
+            StreamReader reader = new StreamReader(file_name);
 
             // , で分割しつつ一行ずつ読み込み、リストに追加していく
             while (reader.Peek() != -1) // reader.Peaekが-1になるまで
@@ -136,6 +152,14 @@ public class Tempo : MonoBehaviour
                 string line = reader.ReadLine(); // 一行ずつ読み込み
                 csvDatas.Add(line.Split(',')); // , 区切りでリストに追加
             }
+
+            Debug.Log(int.Parse(csvDatas[2][0]));
+            bpm = int.Parse(csvDatas[2][0]);
+
+            //1小節当たりのFixedUpdateの呼び出し回数
+            tempo_max = 60 / (0.02f * bpm);
+            frediv = 44100 / (bpm / 60);
+
             //プレハブを配置
             for (int i = 0; i < csvDatas[0].Length; i++)
             {

@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Atsushi/Scene/Map.unity
+    guid: cf4dd1e832d31214ebb422bd555b86ca
+  - enabled: 1
     path: Assets/Atsushi/Scene/Rism.unity
     guid: 590fc6f187204b34dbf9fa1454c8e0be
   m_configObjects: {}
